@@ -1,11 +1,12 @@
 const mysql = require('mysql');
 require('dotenv').config({path: __dirname + '/../../../.env'});
-// console.log(process.env.db_password);
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
+
+const connectToDatabase = () => {
+  const connection = mysql.createConnection({
+    host: process.env.db_host,
+    user: process.env.db_user,
     password: process.env.db_password,
-    database: 'resumeanalyzer_ai',
+    database: process.env.db_name,
     port: 3306
   });
 
@@ -14,6 +15,11 @@ const connection = mysql.createConnection({
       console.error('Error connecting to MySQL: ' + err.stack);
       return;
     }
-  
+
     console.log('Connected to MySQL as ID ' + connection.threadId);
   });
+
+  return connection;
+};
+
+module.exports = connectToDatabase;
